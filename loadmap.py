@@ -44,6 +44,8 @@ WIDTH_PX = mapdata.width * mapdata.tilewidth
 
 screen = pygame.display.set_mode([HEIGHT_PX, WIDTH_PX])
 
+red_dither = pygame.image.load('resources/blue_transparent.png')
+
 # This sets the name of the window
 pygame.display.set_caption('Maps!')
 
@@ -76,6 +78,8 @@ while not done:
             px = x * mapdata.tilewidth
             py = y * mapdata.tileheight
             screen.blit(tile, (px, py))
+            if (abs(x - eliwood.x) + abs(y - eliwood.y)) < 5:
+                screen.blit(red_dither, (px, py))
 
     eliwood.draw(screen)
 
