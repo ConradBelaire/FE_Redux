@@ -1,0 +1,6 @@
+gnureadline==6.3.3
+ipython==3.2.1
+pygame==1.9.2a0
+PyTMX==3.20.10
+six==1.9.0
+wheel==0.24.0
