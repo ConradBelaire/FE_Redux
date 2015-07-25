@@ -20,7 +20,7 @@ BLACK = (0, 0, 0)
 # Call this function so the Pygame library can initialize itself
 pygame.init()
 screen = pygame.display.set_mode([1, 1])
-mapdata = load_pygame("townthing.tmx")
+mapdata = load_pygame("resources/townthing.tmx")
 
 HEIGHT_PX = mapdata.height * mapdata.tileheight
 WIDTH_PX = mapdata.width * mapdata.tilewidth
@@ -47,6 +47,7 @@ while not done:
             px = x * mapdata.tilewidth
             py = y * mapdata.tileheight
             screen.blit(tile, (px, py))
+
     pygame.display.flip()
     clock.tick(60)
 
