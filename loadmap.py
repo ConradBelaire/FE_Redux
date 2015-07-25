@@ -13,16 +13,23 @@ import pygame
 from pytmx.util_pygame import load_pygame
 
 class Player:
-    def __init__(self, filename):
+    def __init__(self, filename, tilewidth, tileheight):
+        self.tilewidth = tilewidth
+        self.tileheight = tileheight
         self.x = 0
         self.y = 0
         self.image = pygame.image.load(filename)
+        self.rect = self.image.get_rect()
+
     def draw(self, screen):
-        screen.blit(self.image, (self.x, self.y))
+        screen.blit(self.image,
+                    (self.x * self.tilewidth,
+                     self.y * self.tileheight - self.rect.bottom + 16))
 
 
 
-eliwood = Player("resources/FE7_Eliwood_Lord_Map_Sprite1.png")
+eliwood = Player("resources/FE7_Eliwood_Lord_Map_Sprite1.png", 16, 16)
+
 # Define some colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -47,7 +54,6 @@ background_position = [0, 0]
 
 done = False
 
-eliwood.y = 24 - 16 - 16
 
 while not done:
     for event in pygame.event.get():
@@ -55,13 +61,13 @@ while not done:
             done = True
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_a:
-                eliwood.x -= 16
+                eliwood.x -= 1
             elif event.key == pygame.K_d:
-                eliwood.x += 16
+                eliwood.x += 1
             elif event.key == pygame.K_w:
-                eliwood.y -= 16
+                eliwood.y -= 1
             elif event.key == pygame.K_s:
-                eliwood.y += 16
+                eliwood.y += 1
             elif event.key == pygame.K_ESCAPE:
                 done = True
 
