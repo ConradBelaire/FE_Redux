@@ -8,6 +8,7 @@ class Player:
         self.tileheight = tileheight
         self.x = 0
         self.y = 0
+        self.speed = 5
         self.image = pygame.image.load(filename)
         self.rect = self.image.get_rect()
 
@@ -44,6 +45,7 @@ def explore(start_pos, budget, neighbours_fn, cost_fn):
         # the neighbours of all in range tiles, to properly draw the red
         # borders.
         if current_cost > budget:
+            costs[current_pos] = budget + 1
             continue
 
         for neighbour in neighbours_fn(current_pos):
@@ -74,6 +76,7 @@ def main():
     screen = pygame.display.set_mode([HEIGHT_PX, WIDTH_PX])
 
     blue_dither = pygame.image.load('resources/blue_transparent.png')
+    red_dither = pygame.image.load('resources/red_transparent.png')
 
     # This sets the name of the window
     pygame.display.set_caption('Maps!')
@@ -120,7 +123,8 @@ def main():
                         yield (new_x, new_y)
             def cost((x,y)):
                 return int(map_data.get_tile_properties(x, y, 0).get('walk_cost', 99999))
-            distance_from_player = explore((eliwood.x, eliwood.y), 5,
+            distance_from_player = explore((eliwood.x, eliwood.y),
+                                           eliwood.speed,
                                            neighbours, cost)
 
 
@@ -131,8 +135,10 @@ def main():
             px = x * map_data.tilewidth
             py = y * map_data.tileheight
             screen.blit(tile, (px, py))
-            if distance_from_player[(x,y)] < 5:
+            if distance_from_player[(x,y)] <= eliwood.speed:
                 screen.blit(blue_dither, (px, py))
+            elif distance_from_player[(x,y)] == eliwood.speed + 1:
+                screen.blit(red_dither, (px, py))
 
         eliwood.draw(screen)
 
