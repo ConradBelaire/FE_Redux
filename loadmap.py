@@ -1,14 +1,3 @@
-"""
- Sample Python/Pygame Programs
- Simpson College Computer Science
- http://programarcadegames.com/
- http://simpson.edu/computer-science/
-
- Explanation video: http://youtu.be/4YqIKncMJNs
- Explanation video: http://youtu.be/ONAK8VZIcI4
- Explanation video: http://youtu.be/_6c4o41BIms
-"""
-
 import pygame
 from pytmx.util_pygame import load_pygame
 
@@ -37,10 +26,12 @@ BLACK = (0, 0, 0)
 # Call this function so the Pygame library can initialize itself
 pygame.init()
 screen = pygame.display.set_mode([1, 1])
-mapdata = load_pygame("resources/townthing.tmx")
+map_data = load_pygame("resources/townthing.tmx")
+# Assume we only have one layer
+map_layer = map_data.layers[0]
 
-HEIGHT_PX = mapdata.height * mapdata.tileheight
-WIDTH_PX = mapdata.width * mapdata.tilewidth
+HEIGHT_PX = map_data.height * map_data.tileheight
+WIDTH_PX = map_data.width * map_data.tilewidth
 
 screen = pygame.display.set_mode([HEIGHT_PX, WIDTH_PX])
 
@@ -58,28 +49,35 @@ done = False
 
 
 while not done:
+    stepped = False
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_a:
                 eliwood.x -= 1
+                stepped = True
             elif event.key == pygame.K_d:
                 eliwood.x += 1
+                stepped = True
             elif event.key == pygame.K_w:
                 eliwood.y -= 1
+                stepped = True
             elif event.key == pygame.K_s:
                 eliwood.y += 1
+                stepped = True
             elif event.key == pygame.K_ESCAPE:
                 done = True
 
-    for layer in mapdata:
-        for x, y, tile in layer.tiles():
-            px = x * mapdata.tilewidth
-            py = y * mapdata.tileheight
-            screen.blit(tile, (px, py))
-            if (abs(x - eliwood.x) + abs(y - eliwood.y)) < 5:
-                screen.blit(red_dither, (px, py))
+    if stepped:
+        print(map_data.get_tile_properties(eliwood.x, eliwood.y, 0))
+
+    for x, y, tile in map_layer.tiles():
+        px = x * map_data.tilewidth
+        py = y * map_data.tileheight
+        screen.blit(tile, (px, py))
+        if (abs(x - eliwood.x) + abs(y - eliwood.y)) < 5:
+            screen.blit(red_dither, (px, py))
 
     eliwood.draw(screen)
 
