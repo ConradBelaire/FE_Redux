@@ -32,7 +32,7 @@ def explore(start_pos, budget, neighbours_fn, cost_fn):
         entering a given position.  Returns -1 for unwalkable tiles.
 
     """
-    costs = collections.defaultdict(lambda: 99999)
+    costs = collections.defaultdict(lambda: 9999)
     costs[start_pos] = 0
 
     queue = collections.deque()
@@ -122,7 +122,8 @@ def main():
                             and 0 <= new_y < map_data.height):
                         yield (new_x, new_y)
             def cost((x,y)):
-                return int(map_data.get_tile_properties(x, y, 0).get('walk_cost', 99999))
+                return int(map_data.get_tile_properties(x, y, 0)
+                           .get('walk_cost', 9999))
             distance_from_player = explore((eliwood.x, eliwood.y),
                                            eliwood.speed,
                                            neighbours, cost)
